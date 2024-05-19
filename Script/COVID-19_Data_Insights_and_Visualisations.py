@@ -7,80 +7,9 @@ Created on Thu May  2 19:02:16 2024
 
 import numpy as np
 import pandas as pd
-import json
-import urllib.request
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-
-# QUESTION 1
-# Open a request to read the data
-covid = urllib.request.urlopen("https://covidtrackerapi.bsg.ox.ac.uk/api/v2/stringency/date-range/2020-01-22/2020-05-10").read()
-
-# Load the data
-covid_output = json.loads(covid)
-
-# Extract the data from covid_api_output
-# Create a list to store the extracted data
-raw_covid_data = []
-
-# Create a loop to extract the data
-for date, country_data in covid_output["data"].items():
-    for country_code, values in country_data.items():
-        row = {"country_code": values["country_code"],
-               "date": values["date_value"],
-               "confirmed_cases": values["confirmed"],
-               "confirmed_deaths": values["deaths"],
-               "stringency": values["stringency"]}
-        # Append the extracted data to the list
-        raw_covid_data.append(row)
-
-# Convert the list to a dataframe
-final_covid_data = pd.DataFrame(raw_covid_data)
-
-# Insert the features for confirmed_cases into a dataframe
-confirmed_cases_data = pd.DataFrame({"country_code": final_covid_data["country_code"],
-                                     "date": final_covid_data["date"],
-                                     "confirmed_cases": final_covid_data["confirmed_cases"]})
-
-# Insert the features for confirmed_deaths into a dataframe
-confirmed_deaths_data = pd.DataFrame({"country_code": final_covid_data["country_code"],
-                                      "date": final_covid_data["date"],
-                                      "confirmed_deaths": final_covid_data["confirmed_deaths"]})
-
-# Insert the features for stringency into a dataframe
-stringency_data = pd.DataFrame({"country_code": final_covid_data["country_code"],
-                                "date": final_covid_data["date"],
-                                "stringency": final_covid_data["stringency"]})
-
-# Convert confirmed_cases_data to pivot
-confirmed_cases_data = confirmed_cases_data.pivot(index = "country_code", columns = "date", 
-                                                  values = "confirmed_cases")
-
-# Convert confirmed_deaths_data to pivot
-confirmed_deaths_data = confirmed_deaths_data.pivot(index = "country_code", columns = "date", 
-                                                    values = "confirmed_deaths")
-
-# Convert stringency_data to pivot
-stringency_data = stringency_data.pivot(index = "country_code", columns = "date", 
-                                        values = "stringency")
-
-# Save the three dataframes in a single excel file using excelwriter
-excel_writer = pd.ExcelWriter("My_OxCGRT_summary.xlsx", engine = "xlsxwriter")
-
-# Put each dataframe in a separate worksheet
-confirmed_cases_data.to_excel(excel_writer, sheet_name = "Confirmed Cases", index = True)
-confirmed_deaths_data.to_excel(excel_writer, sheet_name = "Confirmed Deaths", index = True)
-stringency_data.to_excel(excel_writer, sheet_name = "Stringency Data", index = True) 
-
-# Save the excel file
-excel_writer.close()
-
-
-
-
-
-# QUESTION 2
 # Import the confirmedcases dataset
 confirmed_cases = pd.read_excel(r"C:\Users\keneo\Downloads\Project Dataset\OxCGRT_summary.xlsx",
                                 sheet_name = "confirmedcases")
