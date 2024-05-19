@@ -86,7 +86,7 @@ stringency_index = stringency_index.fillna(0)
 
 
 
-# QUESTION 4a
+
 # Get all the cases between 20th March 2020 and 10th April 2020
 march_april_cases = confirmed_cases.loc[:, "20Mar2020":"10Apr2020"]
 
@@ -103,7 +103,7 @@ new_confirmed_cases["20Mar2020"] = new_confirmed_cases["20Mar2020"].fillna(0)
 
 
 
-# Question 4b
+
 # Add the total cases confirmed on 10 April 2020 to the new confirmed cases dataframe
 new_confirmed_cases["total_cases"] = confirmed_cases["10Apr2020"]
 
@@ -137,7 +137,7 @@ plt.show()
 
 
 
-# QUESTION 5
+
 ############################ CALCULATION FOR TOTAL DAILY CONFIRMED CASES ##########################
 # Insert the 10May2020 column and country_name column from confirmed_cases into an new dataframe
 total_cases = pd.DataFrame({"country_name": confirmed_cases["country_name"],
@@ -227,7 +227,7 @@ plt.show()
 
 
 
-# QUESTION 6
+
 # Filter the confirmed_cases by 04May2020
 filtered_cases = confirmed_cases[confirmed_cases["04May2020"] > 1000]
 
